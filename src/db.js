@@ -1,13 +1,21 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize, Op } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
-const { DB_USER, DB_PASSWORD, DB_HOST, DB_URL } = process.env;
+const {
+  PGUSER, PGPASSWORD, PGHOST, PGPORT, PGDATABASE
+} = process.env;
 
-const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${PGPORT}/${PGDATABASE}`, {
+const sequelize = new Sequelize(`postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`, {
   // const sequelize = new Sequelize("postgres://postgres:1234@localhost:5432/dogs", {
   logging: false,
   native: false,
 });
+
+// const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${PGPORT}/${PGDATABASE}`, {
+//   // const sequelize = new Sequelize("postgres://postgres:1234@localhost:5432/dogs", {
+//   logging: false,
+//   native: false,
+// });
 
 
 const basename = path.basename(__filename);
@@ -40,4 +48,5 @@ Temperament.belongsToMany(Dog, { through: 'DogPersonality' });
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
   conn: sequelize,     // para importart la conexión { conn } = require('./db.js');
+  Op
 };
